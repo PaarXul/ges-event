@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: gestioneventos
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace
+    cl:
+      sri:
+        sis: DEBUG
+  pattern:
+    dateformat: hh:mm:ss
+server:
+  port: 8090

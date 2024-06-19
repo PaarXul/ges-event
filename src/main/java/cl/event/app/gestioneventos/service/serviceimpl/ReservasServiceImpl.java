@@ -58,7 +58,7 @@ public class ReservasServiceImpl implements ReservasService {
     }
 
     @Override
-    public List<Reserva> obtenerReservas(String busqueda, Pageable pageable) {
+    public List<Reserva> obtenerReservas() {
         return reservasRepository.findAll();
 
     }

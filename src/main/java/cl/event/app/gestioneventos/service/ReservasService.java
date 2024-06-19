@@ -11,5 +11,5 @@ public interface ReservasService {
     Reserva actualizarReserva(Reserva reserva);
     void eliminarReserva(Long id);
     Reserva obtenerReserva(Long id);
-    List<Reserva> obtenerReservas(String busqueda, Pageable pageable);
+    List<Reserva> obtenerReservas();
 }

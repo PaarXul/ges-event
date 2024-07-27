@@ -34,7 +34,7 @@ pipeline {
                 script {
                     def scannerHome = tool 'sonar-scanner';
                     withSonarQubeEnv('sonar-scanner') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=gestioneventos"
+                        sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
             }

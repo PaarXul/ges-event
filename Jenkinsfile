@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven'  // Asegúrate de que este nombre coincida con la configuración de tu Jenkins
-        jdk 'JDK'      // Asegúrate de que este nombre coincida con la configuración de tu Jenkins
-    }
 
     stages {
         stage('Checkout') {

@@ -4,7 +4,6 @@ pipeline {
     tools {
         maven 'Maven'  // Asegúrate de que este nombre coincida con la configuración de tu Jenkins
         jdk 'JDK'      // Asegúrate de que este nombre coincida con la configuración de tu Jenkins
-        sonarqubeScanner 'SonarScanner'  // Añadimos la herramienta SonarQube Scanner
     }
 
     stages {

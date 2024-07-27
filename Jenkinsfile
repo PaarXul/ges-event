@@ -40,16 +40,16 @@ pipeline {
             }
         }
 */
-               stage('build && SonarQube analysis') {
-                   steps {
-                       withSonarQubeEnv('<sonarqubeInstallation>') {
+        stage('build && SonarQube analysis') {
+             steps {
+                 withSonarQubeEnv('<sonarqubeInstallation>') {
                            // Optionally use a Maven environment you've configured already
-                           withMaven(maven:'Maven 3.5') {
+                      withMaven(maven:'Maven 3.5') {
                                sh 'mvn clean package sonar:sonar'
                            }
                        }
                    }
-
+        }
         stage("Quality Gate") {
             steps {
                 timeout(time: 1, unit: 'MINUTES') {

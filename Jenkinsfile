@@ -9,7 +9,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/PaarXul/ges-event.git'
             }
         }
-
+/*
         stage('Build') {
             steps {
                 // Compilación del proyecto con Maven
@@ -30,7 +30,7 @@ pipeline {
                 /*withSonarQubeEnv(installationName: 'SonarQube', credentialsId: 'SonarToken') {
                     sh 'mvn sonar:sonar'
                 }
-                */
+
                 script {
                     def scannerHome = tool 'sonar-scanner';
                     withSonarQubeEnv('sonar-scanner') {
@@ -39,6 +39,17 @@ pipeline {
                 }
             }
         }
+*/
+               stage('build && SonarQube analysis') {
+                   steps {
+                       withSonarQubeEnv('<sonarqubeInstallation>') {
+                           // Optionally use a Maven environment you've configured already
+                           withMaven(maven:'Maven 3.5') {
+                               sh 'mvn clean package sonar:sonar'
+                           }
+                       }
+                   }
+
         stage("Quality Gate") {
             steps {
                 timeout(time: 1, unit: 'MINUTES') {

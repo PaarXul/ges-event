@@ -26,7 +26,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 // Análisis de SonarQube
-                withSonarQubeEnv(credentialsId: 'SonarToken') {  // Asegúrate de que este nombre coincida con la configuración de tu Jenkins
+                withSonarQubeEnv(credentialsId: 'SonarToken') {
                     sh 'mvn sonar:sonar'
                 }
             }

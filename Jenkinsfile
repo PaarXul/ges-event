@@ -44,7 +44,7 @@ pipeline {
     post {
         always {
             // Limpieza y notificación
-            cleanWs()
+            deleteDir()
             echo 'Pipeline completado'
         }
     }

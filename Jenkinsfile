@@ -34,7 +34,7 @@ pipeline {
                 script {
                     def scannerHome = tool 'sonar-scanner';
                     withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ges-event -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000 -Dsonar.login=4"
+                        sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
             }

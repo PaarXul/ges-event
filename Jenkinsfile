@@ -27,8 +27,15 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 // Análisis de SonarQube
-                withSonarQubeEnv(installationName: 'SonarQube', credentialsId: 'SonarToken') {
+                /*withSonarQubeEnv(installationName: 'SonarQube', credentialsId: 'SonarToken') {
                     sh 'mvn sonar:sonar'
+                }
+                */
+                script {
+                    def scannerHome = tool 'SonarQube';
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
                 }
             }
         }

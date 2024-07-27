@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        MAVEN 'Maven'  // Asegúrate de que este nombre coincida con la configuración de tu Jenkins
-        SonarQubeScanner 'sonarqube'  // Añadimos la herramienta SonarQube Scanner
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -31,7 +26,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 // Análisis de SonarQube
-                withSonarQubeEnv(SonarQubeScanner) {  // Asegúrate de que este nombre coincida con la configuración de tu Jenkins
+                withSonarQubeEnv(credentialsId: 'SonarToken') {  // Asegúrate de que este nombre coincida con la configuración de tu Jenkins
                     sh 'mvn sonar:sonar'
                 }
             }

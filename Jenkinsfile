@@ -49,7 +49,7 @@ pipeline {
     post {
         always {
             cleanWs()
-            echo 'Pipeline completado'
+            echo 'Pipeline completado porfin'
         }
     }
 }

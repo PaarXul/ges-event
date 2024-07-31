@@ -47,11 +47,15 @@ pipeline {
             deleteDir()
             echo 'Pipeline completado'
 
+            echo 'Sending Slack Notification'
+                    slackSend channel: '#time-tracker-ci',
+                              color: COLOR_MAP[currentBuild.currentResult],
+                              message: """
+                                *${currentBuild.currentResult}:* Job `${env.JOB_NAME}` build `${env.BUILD_NUMBER}`
+                                Branch: `${env.GIT_BRANCH}`
+                                More Info at: ${env.BUILD_URL}
+                              """.stripIndent()
 
-            echo ‘Slack Notification’
-            slackSend channer: ‘tarea-10-gian’,
-            color: COLOR_MAP[currentBuild.currentResult],
-            message: "*${currentBuild.currentResult}*, Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More Info at: ${env.BUILD_URL}"
         }
     }
 }

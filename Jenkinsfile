@@ -49,7 +49,7 @@ pipeline {
             echo 'Pipeline completado'
 
             echo 'Sending Slack Notification'
-                    slackSend channel: '#time-tracker-ci',
+                    slackSend channel: '#tarea-clase-10',
                               color: COLOR_MAP[currentBuild.currentResult],
                               message: """
                                 *${currentBuild.currentResult}:* Job `${env.JOB_NAME}` build `${env.BUILD_NUMBER}`

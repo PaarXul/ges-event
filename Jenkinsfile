@@ -5,11 +5,21 @@ def COLOR_MAP = [
 
 pipeline {
     agent any
+
+    environment {
+        SONAR_SCANNER_HOME = 'sonar-scanner'
+        GIT_BRANCH = 'main'
+        GIT_REPO = 'https://github.com/PaarXul/ges-event.git'
+        SONAR_PROYECT_KEY = 'pipeline-jenkins-sonar'
+        SLACK_CHANNEL = '#tarea-10-gian'
+    }
+
+
     stages {
         stage('Checkout') {
             steps {
                 // Descarga del código fuente
-                git branch: 'main', url: 'https://github.com/PaarXul/ges-event.git'
+                git branch: "$GIT_BRANCH", url: "$GIT_REPO"
             }
         }
         stage('Build') {
@@ -27,9 +37,9 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def scannerHome = tool 'sonar-scanner';
+                    def scannerHome = tool "${SONAR_SCANNER_HOME}";
                     withSonarQubeEnv('sonar-scanner') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=pipeline-jenkins-sonar -Dsonar.java.binaries=target/classes"
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${SONAR_PROYECT_KEY} -Dsonar.java.binaries=target/classes"
                     }
                 }
             }
@@ -49,11 +59,11 @@ pipeline {
             echo 'Pipeline completado'
 
             echo 'Sending Slack Notification'
-                    slackSend channel: '#tarea-clase-10',
+                    slackSend channel: "$SLACK_CHANNEL",
                               color: COLOR_MAP[currentBuild.currentResult],
                               message: """
                                 *${currentBuild.currentResult}:* Job `${env.JOB_NAME}` build `${env.BUILD_NUMBER}`
-                                Branch: `${env.GIT_BRANCH}`
+                                Branch: `${GIT_BRANCH}`
                                 More Info at: ${env.BUILD_URL}
                               """.stripIndent()
 

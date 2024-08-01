@@ -6,12 +6,17 @@ def COLOR_MAP = [
 pipeline {
     agent any
 
+    tools {
+        maven "Maven"
+    }
+
     environment {
         SONAR_SCANNER_HOME = 'sonar-scanner'
         GIT_BRANCH = 'main'
         GIT_REPO = 'https://github.com/PaarXul/ges-event.git'
         SONAR_PROYECT_KEY = 'pipeline-jenkins-sonar'
         SLACK_CHANNEL = '#tarea-10-gian'
+
     }
 
 
@@ -34,6 +39,16 @@ pipeline {
                 sh 'mvn test'
             }
         }
+
+                stage("Maven Build") {
+                    steps {
+                        script {
+                            sh "mvn package -DskipTests=true"
+                        }
+                    }
+                }
+
+/*
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -51,25 +66,26 @@ pipeline {
                 }
             }
         }
-
+*/
 
         stage('Upload Artifact') {
             steps {
+
                 nexusArtifactUploader(
                     nexusVersion: 'nexus3',
                     protocol: 'http',
-                    nexusUrl: 'localhost:8081',
-                    groupId: 'cl.event.app',
-                    version: '0.0.1-SNAPSHOT',
+                    nexusUrl: '172.25.96.1:8081',
+
                     repository: 'td-maven.repo',
-                    credentialsId: 'NexusLogin',
+                    credentialsId: 'NexusLogin2',
                     artifacts: [
-                        [artifactId: 'gestioneventos',
+                        [
                         classifier: '',
-                        file: 'gestioneventos-'+version+'.jar',
+                        file: 'targer/gestioneventos-0.0.1-SNAPSHOT.jar',
                         type: 'jar']
                     ]
                 )
+
 
 
             }
@@ -78,6 +94,9 @@ pipeline {
 
 
     post {
+
+
+
         always {
             // Limpieza y notificación
             deleteDir()

@@ -40,15 +40,14 @@ pipeline {
             }
         }
 
-                stage("Maven Build") {
-                    steps {
-                        script {
-                            sh "mvn package -DskipTests=true"
-                        }
-                    }
+        stage("Maven Build") {
+            steps {
+                script {
+                     sh "mvn package -DskipTests=true"
                 }
+            }
+        }
 
-/*
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -59,6 +58,7 @@ pipeline {
                 }
             }
        }
+
         stage("Quality Gate") {
             steps {
                 timeout(time: 1, unit: 'MINUTES') {
@@ -66,36 +66,19 @@ pipeline {
                 }
             }
         }
-*/
 
-        stage('Upload Artifact') {
+        stage('Upload to Nexus') {
             steps {
-
-                nexusArtifactUploader(
-                    nexusVersion: 'nexus3',
-                    protocol: 'http',
-                    nexusUrl: '172.25.96.1:8081',
-
-                    repository: 'td-maven.repo',
-                    credentialsId: 'NexusLogin2',
-                    artifacts: [
-                        [
-                        classifier: '',
-                        file: 'targer/gestioneventos-0.0.1-SNAPSHOT.jar',
-                        type: 'jar']
-                    ]
-                )
-
-
-
+                // upload to Nexus
+                sh 'mvn clean deploy'
             }
         }
+
+
+
     }
 
-
     post {
-
-
 
         always {
             // Limpieza y notificación

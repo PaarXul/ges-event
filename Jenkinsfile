@@ -51,7 +51,32 @@ pipeline {
                 }
             }
         }
+
+
+        stage('Upload Artifact') {
+            steps {
+                nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: 'localhost:8081',
+                    groupId: 'cl.event.app',
+                    version: '0.0.1-SNAPSHOT',
+                    repository: 'td-maven.repo',
+                    credentialsId: 'NexusLogin',
+                    artifacts: [
+                        [artifactId: 'gestioneventos',
+                        classifier: '',
+                        file: 'gestioneventos-'+version+'.jar',
+                        type: 'jar']
+                    ]
+                )
+
+
+            }
+        }
     }
+
+
     post {
         always {
             // Limpieza y notificación
@@ -70,4 +95,3 @@ pipeline {
         }
     }
 }
-

@@ -16,38 +16,31 @@ pipeline {
         GIT_REPO = 'https://github.com/PaarXul/ges-event.git'
         SONAR_PROYECT_KEY = 'pipeline-jenkins-sonar'
         SLACK_CHANNEL = '#tarea-10-gian'
-
     }
-
 
     stages {
         stage('Checkout') {
             steps {
-                // Descarga del código fuente
                 git branch: "$GIT_BRANCH", url: "$GIT_REPO"
             }
         }
         stage('Build') {
             steps {
-                // Compilación del proyecto con Maven
                 sh 'mvn clean package'
             }
         }
         stage('Test') {
             steps {
-                // Ejecución de pruebas
                 sh 'mvn test'
             }
         }
-
         stage("Maven Build") {
             steps {
                 script {
-                     sh "mvn package -DskipTests=true"
+                    sh "mvn package -DskipTests=true"
                 }
             }
         }
-
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -57,8 +50,7 @@ pipeline {
                     }
                 }
             }
-       }
-
+        }
         stage("Quality Gate") {
             steps {
                 timeout(time: 1, unit: 'MINUTES') {
@@ -66,32 +58,52 @@ pipeline {
                 }
             }
         }
-
         stage('Upload to Nexus') {
             steps {
-                // upload to Nexus
-                sh 'mvn clean deploy -s $HOME/.m2/settings.xml'
+                script {
+                    // Definir la ubicación del settings.xml
+                    def settingsPath = '/var/jenkins_home/.m2/settings.xml'
+
+                    // Verificar si el archivo settings.xml existe
+                    def settingsExists = fileExists settingsPath
+
+                    if (!settingsExists) {
+                        // Si no existe, crear el archivo con el contenido necesario
+                        writeFile file: settingsPath, text: '''
+<settings>
+        <servers>
+                <server>
+                        <id>td-maven-repo</id>
+                        <username>gianp</username>
+                        <password>admin</password>
+                </server>
+        </servers>
+</settings>
+'''
+                        echo "Created settings.xml file at ${settingsPath}"
+                    } else {
+                        echo "settings.xml file already exists at ${settingsPath}"
+                    }
+
+                    // Ejecutar Maven con el archivo settings.xml
+                    sh "mvn clean deploy -s ${settingsPath}"
+                }
             }
         }
-
     }
 
     post {
-
         always {
-            // Limpieza y notificación
             deleteDir()
             echo 'Pipeline completado'
-
             echo 'Sending Slack Notification'
-                    slackSend channel: "$SLACK_CHANNEL",
-                              color: COLOR_MAP[currentBuild.currentResult],
-                              message: """
-                                *${currentBuild.currentResult}:* Job `${env.JOB_NAME}` build `${env.BUILD_NUMBER}`
-                                Branch: `${GIT_BRANCH}`
-                                More Info at: ${env.BUILD_URL}
-                              """.stripIndent()
-
+            slackSend channel: "$SLACK_CHANNEL",
+                      color: COLOR_MAP[currentBuild.currentResult],
+                      message: """
+                        *${currentBuild.currentResult}:* Job `${env.JOB_NAME}` build `${env.BUILD_NUMBER}`
+                        Branch: `${GIT_BRANCH}`
+                        More Info at: ${env.BUILD_URL}
+                      """.stripIndent()
         }
     }
 }

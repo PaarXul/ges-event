@@ -58,36 +58,25 @@ pipeline {
                 }
             }
         }
-        stage('Upload to Nexus') {
+
+
+        stage('Upload Artifact') {
             steps {
-                script {
-                    // Definir la ubicación del settings.xml
-                    def settingsPath = '/var/jenkins_home/.m2/settings.xml'
-
-                    // Verificar si el archivo settings.xml existe
-                    def settingsExists = fileExists settingsPath
-
-                    if (!settingsExists) {
-                        // Si no existe, crear el archivo con el contenido necesario
-                        writeFile file: settingsPath, text: '''
-<settings>
-        <servers>
-                <server>
-                        <id>td-maven-repo</id>
-                        <username>gianp</username>
-                        <password>admin</password>
-                </server>
-        </servers>
-</settings>
-'''
-                        echo "Created settings.xml file at ${settingsPath}"
-                    } else {
-                        echo "settings.xml file already exists at ${settingsPath}"
-                    }
-
-                    // Ejecutar Maven con el archivo settings.xml
-                    sh "mvn clean deploy -s ${settingsPath}"
-                }
+                nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: '172.25.96.1:8081',
+                    groupId: 'QA',
+                    version: """${env.BUILD_ID}-${env.BUILD_TIMESTAMP}""",
+                    repository: 'td-maven.repo',
+                    credentialsId: 'NexusLogin',
+                    artifacts: [
+                        [artifactId: 'gestioneventos',
+                        classifier: '',
+                        file: 'target/gestioneventos-0.0.1-SNAPSHOT.jar',
+                        type: 'jar']
+                    ]
+                )
             }
         }
     }

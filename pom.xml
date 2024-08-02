@@ -118,7 +118,7 @@
 	<repositories>
 		<repository>
 			<id>td-maven-repo</id>
-			<url>http://172.25.96.1:8081/repository/td-maven-repo/</url>
+			<url>http://172.25.96.1:8081/repository/td-maven.repo/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>

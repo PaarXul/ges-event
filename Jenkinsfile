@@ -70,11 +70,9 @@ pipeline {
         stage('Upload to Nexus') {
             steps {
                 // upload to Nexus
-                sh 'mvn clean deploy'
+                sh 'mvn clean deploy -s $HOME/.m2/settings.xml'
             }
         }
-
-
 
     }
 

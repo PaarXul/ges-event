@@ -94,7 +94,7 @@ pipeline {
         }*/
     }
 
-    post {
+   /* post {
         always {
             deleteDir()
             echo 'Pipeline completado'
@@ -108,4 +108,5 @@ pipeline {
                       """.stripIndent()
         }
     }
+    */
 }

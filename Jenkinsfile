@@ -71,8 +71,25 @@ pipeline {
                 }
             }
         }
+        stage("Run SoapUI Tests") {
+                    steps {
+                        sh '/opt/SoapUI/bin/testrunner.sh -s"TestSuite" /opt/SoapUI/Proyecto-soapui-project.xml'
+                    }
+                }
 
-
+         stage('Run JMeter Tests') {
+                    steps {
+                        sh '''
+                        # Asegúrate de tener JMeter instalado y configurado en el PATH
+                        jmeter -n -t script.jmx -l result.jtl
+                        '''
+                    }
+                }
+                stage('Publish Results') {
+                    steps {
+                        perfReport sourceDataFiles: 'result.jtl'
+                    }
+                }
        /* stage('Upload Artifact') {
             steps {
                 nexusArtifactUploader(

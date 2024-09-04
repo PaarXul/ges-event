@@ -70,6 +70,21 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.10.3</version> <!-- Asegúrate de usar la versión más reciente -->
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.junit/junit4-runner -->
+		<dependency>
+			<groupId>org.junit</groupId>
+			<artifactId>junit4-runner</artifactId>
+			<version>5.0.0-ALPHA</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

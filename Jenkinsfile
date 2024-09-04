@@ -34,6 +34,19 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage("Publish Test Results") {
+                    steps {
+                        echo 'Publishing Test Results JUnit'
+                        junit 'target/surefire-reports/*.xml'
+                    }
+                }
+        stage('Archive JaCoCo Report') {
+            steps {
+                echo 'Archiving JaCoCo reports'
+                archiveArtifacts artifacts: 'target/site/jacoco/*', allowEmptyArchive: true
+            }
+        }
+
         stage("Maven Build") {
             steps {
                 script {
@@ -60,7 +73,7 @@ pipeline {
         }
 
 
-        stage('Upload Artifact') {
+       /* stage('Upload Artifact') {
             steps {
                 nexusArtifactUploader(
                     nexusVersion: 'nexus3',
@@ -78,7 +91,7 @@ pipeline {
                     ]
                 )
             }
-        }
+        }*/
     }
 
     post {
